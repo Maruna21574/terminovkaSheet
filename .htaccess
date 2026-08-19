@@ -1,0 +1,30 @@
+RewriteEngine On
+
+# /qr/{slug} -> qr.php?slug={slug} (tlačiteľná stránka s QR kódom pre organizátorov)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^qr/([a-z0-9-]+)/?$ qr.php?slug=$1 [L,QSA]
+
+# /{slug} -> index.php?slug={slug} (formulár konkrétneho podujatia)
+# Vylučuje existujúce súbory a priečinky (napr. /admin, /assets, /data zostávajú nedotknuté).
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-z0-9-]+)/?$ index.php?slug=$1 [L,QSA]
+
+# Zabráň priamemu prístupu k citlivým/pomocným súborom a priečinkom
+<FilesMatch "^(config\.php)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_alias.c>
+    RedirectMatch 404 ^/data/.*$
+    RedirectMatch 404 ^/apps-script/.*$
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+Options -Indexes

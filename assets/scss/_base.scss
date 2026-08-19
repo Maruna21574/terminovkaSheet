@@ -1,0 +1,139 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: $font-family;
+    color: $color-white;
+    background: $color-main-dark;
+    -webkit-font-smoothing: antialiased;
+}
+
+.site-header {
+    min-height: $header-height;
+    background: $color-main-dark;
+    border-bottom: 1px solid $color-grey-100;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.site-header__inner {
+    max-width: $max-width;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.site-header__logo-link {
+    display: block;
+    line-height: 0;
+}
+
+.site-header__logo-img {
+    display: block;
+    height: 36px;
+    width: auto;
+}
+
+.site-header__socials {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.site-header__social-link {
+    display: flex;
+
+    svg {
+        display: block;
+
+        .bg {
+            fill: $color-main-red;
+            transition: fill 0.2s ease-in-out;
+        }
+    }
+
+    &:hover svg .bg {
+        fill: $color-ui-red-100;
+    }
+
+    &:active svg .bg {
+        fill: $color-ui-red-80;
+    }
+}
+
+.site-main {
+    min-height: calc(100vh - #{$header-height} - 60px);
+}
+
+.site-footer {
+    text-align: center;
+    color: $color-grey-40;
+    font-size: 0.8rem;
+    padding: 24px 16px;
+}
+
+.wrap {
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+}
+
+.wrap--narrow {
+    max-width: 400px;
+}
+
+.card {
+    background: $color-grey-100;
+    padding: 24px 20px;
+}
+
+.card--center {
+    text-align: center;
+}
+
+.card__title {
+    margin: 0 0 4px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: $color-white;
+}
+
+.card__subtitle {
+    margin: 0 0 20px;
+    color: $color-grey-40;
+    font-size: 0.9rem;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: $color-main-red;
+    text-decoration: underline;
+    font-size: inherit;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.consent-text {
+    margin-top: 8px;
+    padding: 12px 14px;
+    background: $color-grey-80;
+    border: 1px solid $color-grey-60;
+    font-size: 0.82rem;
+    color: $color-grey-40;
+    line-height: 1.4;
+
+    p {
+        margin: 0;
+    }
+}

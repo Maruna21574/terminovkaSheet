@@ -1,0 +1,206 @@
+.field {
+    margin-bottom: 16px;
+
+    label {
+        display: inline-block;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: $color-grey-40;
+        margin-bottom: 6px;
+
+        &.required::after {
+            content: '*';
+            color: $color-main-red;
+            position: relative;
+            left: 3px;
+        }
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        font-family: inherit;
+        border: 1px solid $color-grey-60;
+        background: $color-grey-80;
+        color: $color-white;
+        appearance: none;
+
+        &::placeholder {
+            color: $color-grey-40;
+            font-weight: 400;
+        }
+
+        &:hover {
+            border-color: $color-grey-40;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: $color-white;
+        }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus {
+            -webkit-text-fill-color: $color-white;
+            -webkit-box-shadow: 0 0 0 1000px $color-grey-80 inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+    }
+
+    select {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%23757b8c' stroke-width='2' fill='none' fill-rule='evenodd'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        padding-right: 40px;
+
+        option {
+            background: $color-grey-80;
+            color: $color-white;
+        }
+    }
+}
+
+.field__hint {
+    display: block;
+    margin-top: 6px;
+    color: $color-grey-40;
+    font-size: 0.75rem;
+}
+
+.field__optional {
+    font-weight: 400;
+    color: $color-grey-40;
+}
+
+.field--checkbox {
+    label {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: $color-grey-40;
+        cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        flex: 0 0 auto;
+        margin-top: 1px;
+        background: $color-grey-80;
+        border: 1px solid $color-grey-60;
+        cursor: pointer;
+        position: relative;
+
+        &:hover {
+            border-color: $color-grey-40;
+        }
+
+        &:checked {
+            background: $color-main-red;
+            border-color: $color-ui-red-100;
+
+            &::after {
+                content: '';
+                position: absolute;
+                left: 6px;
+                top: 2px;
+                width: 5px;
+                height: 10px;
+                border: solid $color-white;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+        }
+    }
+}
+
+.btn {
+    display: inline-block;
+    border: none;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 14px 24px;
+    cursor: pointer;
+    text-align: center;
+    color: $color-white;
+    transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.btn--primary {
+    background: $color-main-red;
+
+    &:hover {
+        background: $color-ui-red-100;
+    }
+
+    &:active {
+        background: $color-ui-red-80;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.btn--block {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.btn--secondary {
+    background: $color-grey-80;
+
+    &:hover {
+        background: $color-grey-60;
+    }
+}
+
+.form-message {
+    padding: 12px 14px;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    border: 1px solid transparent;
+
+    &.is-success {
+        background: rgba($color-ui-green-100, 0.12);
+        border-color: $color-ui-green-100;
+        color: $color-white;
+    }
+
+    &.is-error {
+        background: rgba($color-main-red, 0.12);
+        border-color: $color-main-red;
+        color: $color-white;
+    }
+}
+
+.queue-status {
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    margin-bottom: 16px;
+    background: rgba($color-ui-orange-100, 0.12);
+    border: 1px solid $color-ui-orange-100;
+    color: $color-white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    // [hidden] má rovnakú špecifickosť ako trieda .queue-status, takže bez tohto
+    // pravidla by "display: flex" vyššie prebilo prehliadačové "display: none"
+    // nastavené atribútom hidden - box by ostal viditeľný aj keď má byť skrytý.
+    &[hidden] {
+        display: none;
+    }
+}

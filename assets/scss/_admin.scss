@@ -1,0 +1,78 @@
+.wrap--wide {
+    max-width: 900px;
+}
+
+.admin-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-header-bar__logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: $color-grey-40;
+    font-size: 0.85rem;
+}
+
+.admin-logout-link {
+    color: #fff;
+    font-size: 0.85rem;
+    text-decoration: none;
+    opacity: 0.9;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.card + .card {
+    margin-top: 20px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    th, td {
+        text-align: left;
+        padding: 10px 8px;
+        border-bottom: 1px solid $color-border;
+        white-space: nowrap;
+    }
+
+    th {
+        color: $color-text-muted;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+}
+
+.admin-table__actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    form {
+        display: inline;
+    }
+}
+
+.link-btn--danger {
+    color: $color-error;
+}
+
+.btn {
+    &[href] {
+        text-decoration: none;
+    }
+}

@@ -1,0 +1,46 @@
+// Farebná paleta - prevzaté priamo z abstracts/_variables.scss zdrojového kódu terminovka.sk
+// (rovnaké premenné, rovnaké hex hodnoty ako na ostrej stránke)
+
+$color-main-dark: #141518;
+$color-main-red: #d6243d;
+
+$color-grey-100: #1e1f25;
+$color-grey-80: #282c38;
+$color-grey-60: #3c4254;
+$color-grey-40: #757b8c;
+$color-grey-20: #e5e6ed;
+$color-white: #ffffff;
+
+$color-ui-green-100: #248024;
+$color-ui-green-80: #195a19;
+$color-ui-orange-100: #cb9c24;
+$color-ui-red-100: #ab1d31;
+$color-ui-red-80: #6b121f;
+
+// Spätne kompatibilné aliasy používané v ostatných SCSS súboroch tohto projektu
+$color-primary: $color-main-red;
+$color-primary-dark: $color-ui-red-100;
+$color-text: $color-white;
+$color-text-muted: $color-grey-40;
+$color-bg: $color-main-dark;
+$color-bg-alt: $color-grey-100;
+$color-border: $color-grey-60;
+$color-success: $color-ui-green-100;
+$color-success-bg: rgba($color-ui-green-100, 0.12);
+$color-error: $color-main-red;
+$color-error-bg: rgba($color-main-red, 0.12);
+$color-warning: $color-ui-orange-100;
+$color-warning-bg: rgba($color-ui-orange-100, 0.12);
+
+// terminovka.sk používa licencovaný font "urbane" (Adobe Fonts/Typekit, viazaný na ich účet,
+// nedá sa legálne prevziať do samostatného projektu). Font-stack nižšie je systémový
+// náhradník podobného geometrického/moderného charakteru.
+$font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+// terminovka.sk má ostré (nezaoblené) hrany na tlačidlách aj vstupoch
+$radius: 0;
+$radius-sm: 0;
+$shadow: none;
+
+$max-width: 480px;
+$header-height: 80px;
