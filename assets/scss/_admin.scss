@@ -55,6 +55,15 @@
         text-transform: uppercase;
         letter-spacing: 0.03em;
     }
+
+    td a {
+        color: $color-main-red;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
 
 .admin-table__actions {
