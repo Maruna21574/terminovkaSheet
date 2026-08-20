@@ -37,6 +37,8 @@
         // toho, čo sa odoslalo) - vyčistí sa a scrollne na začiatok až teraz.
         form.reset();
         clearAllFieldErrors();
+        window.clearTimeout(showMessage._t);
+        formMessage.hidden = true;
         form.scrollIntoView({ behavior: 'smooth', block: 'start' });
         var firstField = document.getElementById('meno');
         if (firstField) {

@@ -290,6 +290,13 @@
     gap: 8px;
     animation: status-in 0.2s ease;
 
+    // Rovnaký problém ako pri .queue-status - [hidden] má rovnakú špecifickosť
+    // ako trieda .form-message, takže bez tohto pravidla by "display: flex"
+    // vyššie prebilo prehliadačové "display: none" nastavené atribútom hidden.
+    &[hidden] {
+        display: none;
+    }
+
     &.is-success {
         background: rgba($color-ui-green-100, 0.12);
         border-color: $color-ui-green-100;
