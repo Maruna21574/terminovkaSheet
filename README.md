@@ -25,7 +25,10 @@ bežec (telefón) --/podujatie-sliac--> index.php --submit.php (PHP, cURL)--> Go
   slugu (klient sám spreadsheet_id nepozná ani neposiela) a pošle dáta na Google Apps Script.
 - **Google Apps Script** (`apps-script/Code.gs`) — jeden spoločný skript pre všetky
   podujatia. Podľa `spreadsheet_id`, ktoré príde v požiadavke, otvorí príslušný Sheet
-  a zapíše riadok. Chráni pred duplicitami aj súbežnými zápismi (viacero bežcov naraz).
+  a zapíše riadok do hárka (tab) pomenovaného podľa slugu podujatia — vytvorí ho, ak
+  ešte neexistuje. Takže pokojne môžeš pre viacero podujatí použiť ten istý Sheet
+  dokument, každé dostane vlastný hárok automaticky. Chráni pred duplicitami aj
+  súbežnými zápismi (viacero bežcov naraz).
 - **assets/js/app.js** — offline fronta: pri odoslaní sa záznam okamžite uloží do
   `localStorage` a formulár sa vyčistí (obsluha/bežec môže hneď pokračovať ďalším).
   Na pozadí sa opakovane skúša odoslať (každých 7 s, pri návrate pripojenia, pri
@@ -151,7 +154,7 @@ Websupport shared hosting nemá Node.js pre bežné PHP hostingové plány — S
 kompiluje **lokálne** pred nahratím na server, appka na hostingu používa už hotový
 `assets/css/style.css`.
 
-## Stĺpce v Google Sheete (list „Prihlasenia")
+## Stĺpce v Google Sheete (hárok pomenovaný podľa slugu podujatia)
 
 | Stĺpec | Popis |
 |---|---|

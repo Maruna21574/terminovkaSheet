@@ -1,8 +1,9 @@
 # Obsahuje tajné údaje (Apps Script URL, SHARED_SECRET, admin heslo) - nikdy needituj do Gitu.
 /config.php
 
-# Register podujatí sa vytvára za behu appky priamo na serveri (per-prostredie dáta).
+# Register podujatí a rate-limit dáta sa vytvárajú za behu appky priamo na serveri.
 /data/events.json
+/data/rate_limit.json
 
 # OS/edior smeti
 .DS_Store

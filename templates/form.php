@@ -11,6 +11,12 @@
         <form id="runner-form" novalidate>
             <input type="hidden" name="event_slug" value="<?= h($slug) ?>">
 
+            <!-- Honeypot proti botom - skutoční ľudia toto pole nevidia ani nevyplnia. -->
+            <div class="field-honeypot" aria-hidden="true">
+                <label for="website">Nechajte prázdne</label>
+                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
             <div class="field">
                 <label for="meno" class="required">Meno</label>
                 <input type="text" id="meno" name="meno" autocomplete="given-name" required>

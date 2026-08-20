@@ -142,6 +142,7 @@ $editEvent = ($editSlug !== '' && isset($events[$editSlug])) ? $events[$editSlug
                 <div class="field">
                     <label for="sheet">Google Sheet (URL alebo ID)</label>
                     <input type="text" id="sheet" name="sheet" value="<?= h($editEvent['spreadsheet_id']) ?>" required>
+                    <small class="field__hint">Môžeš pokojne použiť rovnaký Sheet ako pri inom podujatí — každé podujatie má vlastný hárok (tab).</small>
                 </div>
                 <div class="field">
                     <label for="gdpr_url">GDPR URL <span class="field__optional">(nepovinné)</span></label>
@@ -171,7 +172,7 @@ $editEvent = ($editSlug !== '' && isset($events[$editSlug])) ? $events[$editSlug
                 <div class="field">
                     <label for="sheet">Google Sheet (URL alebo ID)</label>
                     <input type="text" id="sheet" name="sheet" placeholder="https://docs.google.com/spreadsheets/d/..." required>
-                    <small class="field__hint">Google účet, pod ktorým je nasadený Apps Script, musí mať k tomuto Sheetu editovacie práva.</small>
+                    <small class="field__hint">Môžeš pokojne použiť rovnaký Sheet ako pri inom podujatí — každé podujatie dostane vlastný hárok (tab) automaticky. Google účet, pod ktorým je nasadený Apps Script, musí mať k tomuto Sheetu editovacie práva.</small>
                 </div>
                 <div class="field">
                     <label for="gdpr_url">GDPR URL <span class="field__optional">(nepovinné)</span></label>

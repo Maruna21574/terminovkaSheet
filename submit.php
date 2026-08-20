@@ -4,6 +4,7 @@ declare(strict_types=1);
 require __DIR__ . '/config.php';
 require __DIR__ . '/includes/functions.php';
 require __DIR__ . '/includes/events.php';
+require __DIR__ . '/includes/ratelimit.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -18,11 +19,23 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     respond(405, ['success' => false, 'error' => 'Metóda nie je povolená.']);
 }
 
+if (!rate_limit_allow(client_ip())) {
+    respond(429, ['success' => false, 'error' => 'Príliš veľa požiadaviek, skúste to o chvíľu.']);
+}
+
 $raw = file_get_contents('php://input');
 $input = json_decode((string) $raw, true);
 
 if (!is_array($input)) {
     respond(400, ['success' => false, 'error' => 'Neplatné dáta.']);
+}
+
+// Honeypot: skryté pole, ktoré skutočný používateľ nikdy nevyplní. Bot, ktorý
+// automaticky vypĺňa všetky polia formulára, sa tu chytí. Odpovieme mu falošným
+// úspechom (aby nespozoroval blokovanie a neskúšal iné spôsoby), ale dáta nikam
+// nezapíšeme.
+if (trim((string) ($input['website'] ?? '')) !== '') {
+    respond(200, ['success' => true]);
 }
 
 $slug = (string) ($input['event_slug'] ?? '');

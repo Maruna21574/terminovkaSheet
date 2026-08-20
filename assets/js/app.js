@@ -214,6 +214,7 @@
         var suhlasUdaje = document.getElementById('suhlas_udaje').checked;
         var suhlasPodmienky = document.getElementById('suhlas_podmienky').checked;
         var eventSlug = form.querySelector('[name="event_slug"]').value;
+        var website = document.getElementById('website').value;
 
         var firstInvalid = null;
         function fail(id, message) {
@@ -239,6 +240,7 @@
 
         var item = {
             event_slug: eventSlug,
+            website: website,
             meno: meno,
             priezvisko: priezvisko,
             pohlavie: pohlavie,

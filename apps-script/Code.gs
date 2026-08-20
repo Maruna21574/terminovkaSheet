@@ -1,8 +1,11 @@
 /**
  * Google Apps Script — prijíma registrácie bežcov z formulára a zapisuje ich
- * do listu "Prihlasenia" v Google Sheete, ktorého ID príde v požiadavke
- * (payload.spreadsheet_id). Vďaka tomu jeden Apps Script vie obsluhovať
- * ľubovoľný počet podujatí, každé s vlastným Sheetom.
+ * do Google Sheetu, ktorého ID príde v požiadavke (payload.spreadsheet_id).
+ * Každé podujatie dostane vlastný HÁROK (tab) v tomto Sheete, pomenovaný podľa
+ * URL adresy (slug) podujatia - takže pokojne môžeš pre všetky podujatia v admine
+ * použiť ten istý Google Sheet dokument a appka si sama vytvorí nový hárok pre
+ * každé nové podujatie. (Ak chceš pre niektoré podujatie úplne samostatný
+ * dokument, stačí mu v admine zadať iné spreadsheet_id/URL.)
  *
  * DÔLEŽITÉ: Google účet, pod ktorým je tento skript nasadený ("Execute as: Me"),
  * musí mať editovacie práva na KAŽDÝ Sheet, ktorého ID sem príde (typicky preto,
@@ -22,7 +25,6 @@
  * 6. Pri prvom spustení Google požiada o povolenie prístupu k Sheetom — schváľ.
  */
 
-var SHEET_NAME = 'Prihlasenia';
 var HEADERS = [
     'Čas odoslania',
     'Podujatie',
@@ -58,7 +60,7 @@ function doPost(e) {
             return jsonResponse({ success: false, error: 'Chýba ID cieľového Google Sheetu.' });
         }
 
-        var sheet = getOrCreateSheet(spreadsheetId);
+        var sheet = getOrCreateSheet(spreadsheetId, sheetNameFor(data));
         var submissionId = sanitize(data.submission_id);
 
         if (submissionId && isDuplicate(sheet, submissionId)) {
@@ -96,17 +98,27 @@ function doGet() {
     return jsonResponse({ success: true, info: 'Terminovka registrácia — Apps Script beží.' });
 }
 
-function getOrCreateSheet(spreadsheetId) {
+function getOrCreateSheet(spreadsheetId, sheetName) {
     var ss = SpreadsheetApp.openById(spreadsheetId);
-    var sheet = ss.getSheetByName(SHEET_NAME);
+    var sheet = ss.getSheetByName(sheetName);
     if (!sheet) {
-        sheet = ss.insertSheet(SHEET_NAME);
+        sheet = ss.insertSheet(sheetName);
     }
     if (sheet.getLastRow() === 0) {
         sheet.appendRow(HEADERS);
         sheet.setFrozenRows(1);
     }
     return sheet;
+}
+
+/**
+ * Názov hárka (tab) pre dané podujatie - podľa jeho slugu (URL adresy),
+ * očistený od znakov, ktoré Google Sheets v názve hárka nepovoľuje.
+ */
+function sheetNameFor(data) {
+    var raw = sanitize(data.event_slug) || sanitize(data.event_name) || 'podujatie';
+    var name = raw.replace(/[\[\]\*\?\/\\:]/g, '-').substring(0, 100);
+    return name || 'podujatie';
 }
 
 function isDuplicate(sheet, submissionId) {
