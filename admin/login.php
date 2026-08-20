@@ -12,7 +12,8 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = (string) ($_POST['username'] ?? '');
     $password = (string) ($_POST['password'] ?? '');
-    if (admin_login($username, $password)) {
+    $remember = !empty($_POST['remember']);
+    if (admin_login($username, $password, $remember)) {
         header('Location: /admin/');
         exit;
     }
@@ -47,6 +48,12 @@ if (admin_is_logged_in()) {
             <div class="field">
                 <label for="password">Heslo</label>
                 <input type="password" id="password" name="password" autocomplete="current-password" required>
+            </div>
+            <div class="field field--checkbox">
+                <label>
+                    <input type="checkbox" id="remember" name="remember" value="1">
+                    <span>Zapamätať prihlásenie na tomto zariadení (30 dní)</span>
+                </label>
             </div>
             <button type="submit" class="btn btn--primary btn--block">Prihlásiť sa</button>
         </form>
