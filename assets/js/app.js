@@ -303,5 +303,13 @@
     window.addEventListener('load', flushQueue);
     setInterval(flushQueue, RETRY_INTERVAL_MS);
 
+    // Varovanie pred zatvorením karty, kým čaká neodoslaný záznam vo fronte.
+    window.addEventListener('beforeunload', function (e) {
+        if (loadQueue().length > 0) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
+
     updateQueueStatus();
 })();
