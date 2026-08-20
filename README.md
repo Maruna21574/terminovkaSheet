@@ -159,11 +159,11 @@ kompiluje **lokálne** pred nahratím na server, appka na hostingu používa už
 | Podujatie | názov podujatia priradený v administrácii |
 | Priezvisko | |
 | Meno | |
-| Pohlavie | Muž / Žena |
+| Pohlavie | M / Ž |
 | Dátum narodenia | DD.MM.RRRR ako zadal bežec |
 | Rok narodenia | automaticky vypočítané z dátumu narodenia |
 | Klub | nepovinné |
-| Obec | |
+| Obec | nepovinné |
 | Trať | vyplní si bežec sám (voľný text, napr. „10 km") |
 | ID záznamu (dedup) | interné UUID, slúži na ochranu pred duplicitným zápisom pri opakovanom odoslaní (napr. pri výpadku internetu) — môžeš stĺpec skryť |
 

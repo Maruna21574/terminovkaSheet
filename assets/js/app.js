@@ -8,10 +8,14 @@
 
     var form = document.getElementById('runner-form');
     var submitBtn = document.getElementById('submit-btn');
-    var narodenieInput = document.getElementById('narodenie');
+    var narodenieDen = document.getElementById('narodenie_den');
+    var narodenieMesiac = document.getElementById('narodenie_mesiac');
+    var narodenieRok = document.getElementById('narodenie_rok');
     var formMessage = document.getElementById('form-message');
     var queueStatus = document.getElementById('queue-status');
     var queueStatusText = document.getElementById('queue-status-text');
+
+    var FIELD_IDS = ['meno', 'priezvisko', 'pohlavie', 'narodenie', 'obec', 'trat', 'suhlas_udaje', 'suhlas_podmienky'];
 
     // ---------- Consent text toggles ----------
     document.querySelectorAll('[data-toggle]').forEach(function (btn) {
@@ -23,18 +27,42 @@
         });
     });
 
-    // ---------- Birth date auto-formatting DD.MM.RRRR ----------
-    narodenieInput.addEventListener('input', function () {
-        var digits = narodenieInput.value.replace(/\D/g, '').slice(0, 8);
-        var out = '';
-        if (digits.length <= 2) {
-            out = digits;
-        } else if (digits.length <= 4) {
-            out = digits.slice(0, 2) + '.' + digits.slice(2);
-        } else {
-            out = digits.slice(0, 2) + '.' + digits.slice(2, 4) + '.' + digits.slice(4);
+    // ---------- Chybové hlášky pri jednotlivých poliach ----------
+    function fieldInputs(id) {
+        if (id === 'narodenie') {
+            return [narodenieDen, narodenieMesiac, narodenieRok];
         }
-        narodenieInput.value = out;
+        var el = document.getElementById(id);
+        return el ? [el] : [];
+    }
+
+    function setFieldError(id, message) {
+        var errorEl = document.getElementById(id + '-error');
+        var inputs = fieldInputs(id);
+        if (message) {
+            if (errorEl) {
+                errorEl.textContent = message;
+                errorEl.hidden = false;
+            }
+            inputs.forEach(function (el) { el.classList.add('error'); });
+        } else {
+            if (errorEl) {
+                errorEl.hidden = true;
+                errorEl.textContent = '';
+            }
+            inputs.forEach(function (el) { el.classList.remove('error'); });
+        }
+    }
+
+    function clearAllFieldErrors() {
+        FIELD_IDS.forEach(function (id) { setFieldError(id, null); });
+    }
+
+    FIELD_IDS.forEach(function (id) {
+        fieldInputs(id).forEach(function (el) {
+            el.addEventListener('input', function () { setFieldError(id, null); });
+            el.addEventListener('change', function () { setFieldError(id, null); });
+        });
     });
 
     function isValidBirthdate(value) {
@@ -150,6 +178,7 @@
 
                 if (result === 'success' && current.submission_id === lastSubmittedId) {
                     showMessage('Registrácia bola úspešne odoslaná.', 'success');
+                    window.alert('Vyzdvihni si číslo a povedz, že si z formulára.');
                 } else if (result === 'invalid') {
                     showMessage('Záznam sa nepodarilo odoslať: ' + error, 'error');
                 }
@@ -170,10 +199,15 @@
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
+        clearAllFieldErrors();
+
         var meno = document.getElementById('meno').value.trim();
         var priezvisko = document.getElementById('priezvisko').value.trim();
         var pohlavie = document.getElementById('pohlavie').value;
-        var narodenie = narodenieInput.value.trim();
+        var den = narodenieDen.value;
+        var mesiac = narodenieMesiac.value;
+        var rok = narodenieRok.value.trim();
+        var narodenie = (den && mesiac && rok) ? (den + '.' + mesiac + '.' + rok) : '';
         var klub = document.getElementById('klub').value.trim();
         var obec = document.getElementById('obec').value.trim();
         var trat = document.getElementById('trat').value.trim();
@@ -181,18 +215,25 @@
         var suhlasPodmienky = document.getElementById('suhlas_podmienky').checked;
         var eventSlug = form.querySelector('[name="event_slug"]').value;
 
-        var errors = [];
-        if (!meno) errors.push('Vyplňte meno.');
-        if (!priezvisko) errors.push('Vyplňte priezvisko.');
-        if (!pohlavie) errors.push('Vyberte pohlavie.');
-        if (!isValidBirthdate(narodenie)) errors.push('Zadajte platný dátum narodenia (DD.MM.RRRR).');
-        if (!obec) errors.push('Vyplňte obec.');
-        if (!trat) errors.push('Vyplňte trať.');
-        if (!suhlasUdaje) errors.push('Potvrďte súhlas so spracovaním osobných údajov.');
-        if (!suhlasPodmienky) errors.push('Potvrďte súhlas s podmienkami podujatia.');
+        var firstInvalid = null;
+        function fail(id, message) {
+            setFieldError(id, message);
+            if (!firstInvalid) {
+                firstInvalid = fieldInputs(id)[0];
+            }
+        }
 
-        if (errors.length > 0) {
-            showMessage(errors.join(' '), 'error');
+        if (!meno) fail('meno', 'Vyplňte meno.');
+        if (!priezvisko) fail('priezvisko', 'Vyplňte priezvisko.');
+        if (!pohlavie) fail('pohlavie', 'Vyberte pohlavie.');
+        if (!isValidBirthdate(narodenie)) fail('narodenie', 'Zadajte platný dátum narodenia.');
+        if (!trat) fail('trat', 'Vyplňte trať.');
+        if (!suhlasUdaje) fail('suhlas_udaje', 'Potvrďte súhlas so spracovaním osobných údajov.');
+        if (!suhlasPodmienky) fail('suhlas_podmienky', 'Potvrďte súhlas s podmienkami podujatia.');
+
+        if (firstInvalid) {
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalid.focus({ preventScroll: true });
             return;
         }
 
@@ -218,8 +259,8 @@
         lastSubmittedId = item.submission_id;
 
         form.reset();
-        narodenieInput.value = '';
-        showMessage('Záznam sa odosiela...', 'success');
+        clearAllFieldErrors();
+        showMessage('Registrácia sa odosiela. Nezatvárajte okno!', 'success');
 
         flushQueue();
     });

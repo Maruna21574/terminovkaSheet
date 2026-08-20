@@ -43,33 +43,6 @@ body {
     width: auto;
 }
 
-.site-header__socials {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.site-header__social-link {
-    display: flex;
-
-    svg {
-        display: block;
-
-        .bg {
-            fill: $color-main-red;
-            transition: fill 0.2s ease-in-out;
-        }
-    }
-
-    &:hover svg .bg {
-        fill: $color-ui-red-100;
-    }
-
-    &:active svg .bg {
-        fill: $color-ui-red-80;
-    }
-}
-
 .site-main {
     min-height: calc(100vh - #{$header-height} - 60px);
 }

@@ -55,9 +55,6 @@ if (!in_array($pohlavie, ['muz', 'zena'], true)) {
 if (!is_valid_birthdate($narodenie)) {
     $errors[] = 'Dátum narodenia musí byť v tvare DD.MM.RRRR.';
 }
-if (trim($obec) === '') {
-    $errors[] = 'Obec je povinná.';
-}
 if (trim($trat) === '') {
     $errors[] = 'Trať je povinná.';
 }
@@ -82,7 +79,7 @@ $payload = [
     'event_name' => sanitize_field((string) $event['name']),
     'meno' => sanitize_field($meno),
     'priezvisko' => sanitize_field($priezvisko),
-    'pohlavie' => $pohlavie === 'muz' ? 'Muž' : 'Žena',
+    'pohlavie' => $pohlavie === 'muz' ? 'M' : 'Ž',
     'narodenie' => sanitize_field($narodenie),
     'rok_narodenia' => extract_birth_year($narodenie),
     'klub' => sanitize_field($klub),

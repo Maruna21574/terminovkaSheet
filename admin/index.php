@@ -22,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim((string) ($_POST['name'] ?? ''));
             $slugInput = trim((string) ($_POST['slug'] ?? ''));
             $sheetInput = trim((string) ($_POST['sheet'] ?? ''));
+            $gdprUrl = trim((string) ($_POST['gdpr_url'] ?? ''));
+            $termsUrl = trim((string) ($_POST['terms_url'] ?? ''));
             $slug = slugify($slugInput !== '' ? $slugInput : $name);
             $spreadsheetId = extract_spreadsheet_id($sheetInput);
 
@@ -33,10 +35,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Podujatie s touto URL adresou už existuje.';
             } elseif ($spreadsheetId === '') {
                 $error = 'Zadajte platnú URL alebo ID Google Sheetu.';
+            } elseif ($gdprUrl !== '' && !filter_var($gdprUrl, FILTER_VALIDATE_URL)) {
+                $error = 'GDPR URL adresa nie je platná.';
+            } elseif ($termsUrl !== '' && !filter_var($termsUrl, FILTER_VALIDATE_URL)) {
+                $error = 'URL adresa podmienok nie je platná.';
             } else {
                 $events[$slug] = [
                     'name' => $name,
                     'spreadsheet_id' => $spreadsheetId,
+                    'gdpr_url' => $gdprUrl,
+                    'terms_url' => $termsUrl,
                     'created_at' => date('c'),
                 ];
                 save_events($events);
@@ -46,6 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $slug = (string) ($_POST['slug'] ?? '');
             $name = trim((string) ($_POST['name'] ?? ''));
             $sheetInput = trim((string) ($_POST['sheet'] ?? ''));
+            $gdprUrl = trim((string) ($_POST['gdpr_url'] ?? ''));
+            $termsUrl = trim((string) ($_POST['terms_url'] ?? ''));
             $spreadsheetId = extract_spreadsheet_id($sheetInput);
 
             if (!isset($events[$slug])) {
@@ -54,9 +64,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Zadajte názov podujatia.';
             } elseif ($spreadsheetId === '') {
                 $error = 'Zadajte platnú URL alebo ID Google Sheetu.';
+            } elseif ($gdprUrl !== '' && !filter_var($gdprUrl, FILTER_VALIDATE_URL)) {
+                $error = 'GDPR URL adresa nie je platná.';
+            } elseif ($termsUrl !== '' && !filter_var($termsUrl, FILTER_VALIDATE_URL)) {
+                $error = 'URL adresa podmienok nie je platná.';
             } else {
                 $events[$slug]['name'] = $name;
                 $events[$slug]['spreadsheet_id'] = $spreadsheetId;
+                $events[$slug]['gdpr_url'] = $gdprUrl;
+                $events[$slug]['terms_url'] = $termsUrl;
                 save_events($events);
                 $notice = 'Podujatie „' . $name . '" bolo upravené.';
             }
@@ -127,6 +143,15 @@ $editEvent = ($editSlug !== '' && isset($events[$editSlug])) ? $events[$editSlug
                     <label for="sheet">Google Sheet (URL alebo ID)</label>
                     <input type="text" id="sheet" name="sheet" value="<?= h($editEvent['spreadsheet_id']) ?>" required>
                 </div>
+                <div class="field">
+                    <label for="gdpr_url">GDPR URL <span class="field__optional">(nepovinné)</span></label>
+                    <input type="text" id="gdpr_url" name="gdpr_url" value="<?= h($editEvent['gdpr_url'] ?? '') ?>" placeholder="https://...">
+                    <small class="field__hint">Ak necháš prázdne, bežcovi sa namiesto odkazu zobrazí zástupný text priamo vo formulári.</small>
+                </div>
+                <div class="field">
+                    <label for="terms_url">Podmienky podujatia URL <span class="field__optional">(nepovinné)</span></label>
+                    <input type="text" id="terms_url" name="terms_url" value="<?= h($editEvent['terms_url'] ?? '') ?>" placeholder="https://...">
+                </div>
                 <button type="submit" class="btn btn--primary">Uložiť zmeny</button>
                 <a href="/admin/" class="btn btn--secondary">Zrušiť</a>
             </form>
@@ -147,6 +172,15 @@ $editEvent = ($editSlug !== '' && isset($events[$editSlug])) ? $events[$editSlug
                     <label for="sheet">Google Sheet (URL alebo ID)</label>
                     <input type="text" id="sheet" name="sheet" placeholder="https://docs.google.com/spreadsheets/d/..." required>
                     <small class="field__hint">Google účet, pod ktorým je nasadený Apps Script, musí mať k tomuto Sheetu editovacie práva.</small>
+                </div>
+                <div class="field">
+                    <label for="gdpr_url">GDPR URL <span class="field__optional">(nepovinné)</span></label>
+                    <input type="text" id="gdpr_url" name="gdpr_url" placeholder="https://...">
+                    <small class="field__hint">Odkaz na externú stránku so súhlasom o spracovaní osobných údajov. Ak necháš prázdne, zobrazí sa zástupný text priamo vo formulári.</small>
+                </div>
+                <div class="field">
+                    <label for="terms_url">Podmienky podujatia URL <span class="field__optional">(nepovinné)</span></label>
+                    <input type="text" id="terms_url" name="terms_url" placeholder="https://...">
                 </div>
                 <button type="submit" class="btn btn--primary">Vytvoriť podujatie</button>
             </form>

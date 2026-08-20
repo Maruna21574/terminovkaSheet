@@ -18,6 +18,7 @@
 
     input[type="text"],
     input[type="password"],
+    input[type="number"],
     select {
         width: 100%;
         padding: 14px 16px;
@@ -28,6 +29,7 @@
         background: $color-grey-80;
         color: $color-white;
         appearance: none;
+        -moz-appearance: textfield;
 
         &::placeholder {
             color: $color-grey-40;
@@ -50,6 +52,35 @@
             -webkit-box-shadow: 0 0 0 1000px $color-grey-80 inset;
             transition: background-color 5000s ease-in-out 0s;
         }
+
+        &.error {
+            border-color: $color-main-red;
+        }
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .field__row {
+        display: flex;
+        gap: 8px;
+
+        select,
+        input {
+            min-width: 0;
+        }
+
+        #narodenie_den,
+        #narodenie_mesiac {
+            flex: 0 1 90px;
+        }
+
+        #narodenie_rok {
+            flex: 1 1 auto;
+        }
     }
 
     select {
@@ -70,6 +101,18 @@
     margin-top: 6px;
     color: $color-grey-40;
     font-size: 0.75rem;
+}
+
+.field__error {
+    display: block;
+    margin-top: 6px;
+    color: $color-main-red;
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    &[hidden] {
+        display: none;
+    }
 }
 
 .field__optional {
@@ -102,6 +145,10 @@
 
         &:hover {
             border-color: $color-grey-40;
+        }
+
+        &.error {
+            border-color: $color-main-red;
         }
 
         &:checked {
