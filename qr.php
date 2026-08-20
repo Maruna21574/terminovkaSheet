@@ -24,6 +24,7 @@ $formUrl = $scheme . '://' . $host . '/' . $slug;
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QR kód — <?= h($event['name']) ?></title>
+<link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
 <link rel="stylesheet" href="<?= h(asset_url('assets/css/style.css')) ?>">
 <style>
   .qr-page { text-align: center; padding: 48px 16px; }

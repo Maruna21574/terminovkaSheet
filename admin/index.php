@@ -102,6 +102,7 @@ $editEvent = ($editSlug !== '' && isset($events[$editSlug])) ? $events[$editSlug
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Administrácia — <?= h(SITE_NAME) ?></title>
+<link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
 <link rel="stylesheet" href="<?= h(asset_url('assets/css/style.css')) ?>">
 </head>
 <body>

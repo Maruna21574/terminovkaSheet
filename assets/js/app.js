@@ -18,6 +18,11 @@
 
     var FIELD_IDS = ['meno', 'priezvisko', 'pohlavie', 'narodenie', 'obec', 'trat', 'suhlas_udaje', 'suhlas_podmienky'];
 
+    function setButtonLoading(loading) {
+        submitBtn.disabled = loading;
+        submitBtn.classList.toggle('is-loading', loading);
+    }
+
     // ---------- Popup po úspešnom odoslaní ----------
     function showPickupModal() {
         pickupModal.hidden = false;
@@ -260,6 +265,8 @@
             return;
         }
 
+        setButtonLoading(true);
+
         var item = {
             event_slug: eventSlug,
             website: website,
@@ -285,6 +292,8 @@
         form.reset();
         clearAllFieldErrors();
         showMessage('Registrácia sa odosiela. Nezatvárajte okno!', 'success');
+
+        window.setTimeout(function () { setButtonLoading(false); }, 700);
 
         flushQueue();
     });

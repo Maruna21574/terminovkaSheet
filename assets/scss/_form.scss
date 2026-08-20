@@ -195,7 +195,10 @@
 }
 
 .btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     border: none;
     font-family: inherit;
     font-size: 0.9rem;
@@ -205,6 +208,27 @@
     text-align: center;
     color: $color-white;
     transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.btn__spinner {
+    display: none;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+    border: 2px solid rgba($color-white, 0.4);
+    border-top-color: $color-white;
+    border-radius: 50%;
+    animation: btn-spin 0.6s linear infinite;
+}
+
+.btn.is-loading .btn__spinner {
+    display: inline-block;
+}
+
+@keyframes btn-spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .btn--primary {
@@ -225,7 +249,7 @@
 }
 
 .btn--block {
-    display: block;
+    display: flex;
     width: 100%;
     margin-top: 8px;
 }

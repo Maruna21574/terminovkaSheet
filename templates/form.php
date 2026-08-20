@@ -123,7 +123,10 @@
                 <span class="field__error" id="suhlas_podmienky-error" hidden></span>
             </div>
 
-            <button type="submit" id="submit-btn" class="btn btn--primary btn--block">Odoslať</button>
+            <button type="submit" id="submit-btn" class="btn btn--primary btn--block">
+                <span class="btn__spinner" aria-hidden="true"></span>
+                <span class="btn__label">Odoslať</span>
+            </button>
 
             <div class="status-stack">
                 <div id="form-message" class="form-message" hidden></div>

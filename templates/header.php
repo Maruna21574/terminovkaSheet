@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title><?= h(SITE_NAME) ?></title>
+<link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
 <link rel="stylesheet" href="<?= h(asset_url('assets/css/style.css')) ?>">
 <meta name="theme-color" content="#141518">
 </head>
