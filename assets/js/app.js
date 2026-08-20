@@ -33,9 +33,10 @@
         pickupModal.hidden = true;
         document.body.classList.remove('modal-open');
 
-        // Formulár je už vyčistený (reset prebehol hneď pri odoslaní) - po zavretí
-        // popupu len scrollneme naspäť na začiatok a dáme kurzor do prvého poľa,
-        // nech je hneď vidno pripravený prázdny formulár pre ďalšieho bežca.
+        // Formulár zámerne zostáva vyplnený až do zatvorenia popupu (potvrdenie
+        // toho, čo sa odoslalo) - vyčistí sa a scrollne na začiatok až teraz.
+        form.reset();
+        clearAllFieldErrors();
         form.scrollIntoView({ behavior: 'smooth', block: 'start' });
         var firstField = document.getElementById('meno');
         if (firstField) {
@@ -298,8 +299,6 @@
 
         lastSubmittedId = item.submission_id;
 
-        form.reset();
-        clearAllFieldErrors();
         showMessage('Registrácia sa odosiela. Nezatvárajte okno!', 'success');
 
         window.setTimeout(function () { setButtonLoading(false); }, 700);
