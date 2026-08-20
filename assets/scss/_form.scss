@@ -23,6 +23,10 @@
             position: relative;
             left: 3px;
         }
+
+        &.field__label--spaced {
+            margin-bottom: 12px;
+        }
     }
 
     input[type="text"],
@@ -224,6 +228,18 @@
     display: block;
     width: 100%;
     margin-top: 8px;
+}
+
+.btn--success {
+    background: $color-ui-green-100;
+
+    &:hover {
+        background: $color-ui-green-80;
+    }
+
+    &:active {
+        background: $color-ui-green-60;
+    }
 }
 
 .btn--secondary {

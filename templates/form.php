@@ -36,7 +36,7 @@
             </div>
 
             <div class="field">
-                <label for="narodenie_den" class="required">Dátum narodenia</label>
+                <label for="narodenie_den" class="required field__label--spaced">Dátum narodenia</label>
                 <div class="field__row">
                     <div class="field__row-item">
                         <span class="field__row-label">Deň</span>
@@ -151,7 +151,7 @@
         </div>
         <h2 id="pickup-modal-title" class="modal__title">Registrácia odoslaná!</h2>
         <p class="modal__text">Vyzdvihni si číslo a povedz, že si z formulára.</p>
-        <button type="button" class="btn btn--primary btn--block" data-modal-close>Rozumiem</button>
+        <button type="button" class="btn btn--success btn--block" data-modal-close>Rozumiem</button>
     </div>
 </div>
 
