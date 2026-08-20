@@ -14,8 +14,30 @@
     var formMessage = document.getElementById('form-message');
     var queueStatus = document.getElementById('queue-status');
     var queueStatusText = document.getElementById('queue-status-text');
+    var pickupModal = document.getElementById('pickup-modal');
 
     var FIELD_IDS = ['meno', 'priezvisko', 'pohlavie', 'narodenie', 'obec', 'trat', 'suhlas_udaje', 'suhlas_podmienky'];
+
+    // ---------- Popup po úspešnom odoslaní ----------
+    function showPickupModal() {
+        pickupModal.hidden = false;
+        document.body.classList.add('modal-open');
+    }
+
+    function hidePickupModal() {
+        pickupModal.hidden = true;
+        document.body.classList.remove('modal-open');
+    }
+
+    pickupModal.querySelectorAll('[data-modal-close]').forEach(function (el) {
+        el.addEventListener('click', hidePickupModal);
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !pickupModal.hidden) {
+            hidePickupModal();
+        }
+    });
 
     // ---------- Consent text toggles ----------
     document.querySelectorAll('[data-toggle]').forEach(function (btn) {
@@ -178,7 +200,7 @@
 
                 if (result === 'success' && current.submission_id === lastSubmittedId) {
                     showMessage('Registrácia bola úspešne odoslaná.', 'success');
-                    window.alert('Vyzdvihni si číslo a povedz, že si z formulára.');
+                    showPickupModal();
                 } else if (result === 'invalid') {
                     showMessage('Záznam sa nepodarilo odoslať: ' + error, 'error');
                 }

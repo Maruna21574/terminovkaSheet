@@ -76,20 +76,31 @@
     .field__row {
         display: flex;
         gap: 8px;
+    }
+
+    .field__row-item {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        flex: 0 1 90px;
+
+        &--year {
+            flex: 1 1 auto;
+        }
 
         select,
         input {
             min-width: 0;
         }
+    }
 
-        #narodenie_den,
-        #narodenie_mesiac {
-            flex: 0 1 90px;
-        }
-
-        #narodenie_rok {
-            flex: 1 1 auto;
-        }
+    .field__row-label {
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: $color-grey-40;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
     }
 
     select {
@@ -223,11 +234,21 @@
     }
 }
 
+.status-stack {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .form-message {
     padding: 12px 14px;
     font-size: 0.85rem;
-    margin-bottom: 16px;
     border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: status-in 0.2s ease;
 
     &.is-success {
         background: rgba($color-ui-green-100, 0.12);
@@ -245,18 +266,45 @@
 .queue-status {
     padding: 10px 14px;
     font-size: 0.8rem;
-    margin-bottom: 16px;
     background: rgba($color-ui-orange-100, 0.12);
     border: 1px solid $color-ui-orange-100;
     color: $color-white;
     display: flex;
     align-items: center;
     gap: 8px;
+    animation: status-in 0.2s ease;
 
     // [hidden] má rovnakú špecifickosť ako trieda .queue-status, takže bez tohto
     // pravidla by "display: flex" vyššie prebilo prehliadačové "display: none"
     // nastavené atribútom hidden - box by ostal viditeľný aj keď má byť skrytý.
     &[hidden] {
         display: none;
+    }
+}
+
+.queue-status__icon {
+    display: flex;
+    flex: 0 0 auto;
+    color: $color-ui-orange-100;
+    animation: status-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes status-in {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes status-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.45;
     }
 }

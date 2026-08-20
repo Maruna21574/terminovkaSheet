@@ -107,16 +107,20 @@ function getOrCreateSheet(spreadsheetId, sheetName) {
     if (sheet.getLastRow() === 0) {
         sheet.appendRow(HEADERS);
         sheet.setFrozenRows(1);
+        // Posledný stĺpec (ID záznamu) slúži len na ochranu pred duplicitami,
+        // v tabuľke nie je potrebný - skryjeme ho, aby neprekážal.
+        sheet.hideColumns(HEADERS.length);
     }
     return sheet;
 }
 
 /**
- * Názov hárka (tab) pre dané podujatie - podľa jeho slugu (URL adresy),
- * očistený od znakov, ktoré Google Sheets v názve hárka nepovoľuje.
+ * Názov hárka (tab) pre dané podujatie - podľa názvu podujatia zadaného
+ * v administrácii, očistený od znakov, ktoré Google Sheets v názve hárka
+ * nepovoľuje.
  */
 function sheetNameFor(data) {
-    var raw = sanitize(data.event_slug) || sanitize(data.event_name) || 'podujatie';
+    var raw = sanitize(data.event_name) || sanitize(data.event_slug) || 'podujatie';
     var name = raw.replace(/[\[\]\*\?\/\\:]/g, '-').substring(0, 100);
     return name || 'podujatie';
 }

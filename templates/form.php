@@ -4,10 +4,6 @@
         <h1 class="card__title"><?= h($event['name']) ?></h1>
         <p class="card__subtitle">Prezenčná registrácia bežca — vyplňte prosím všetky údaje.</p>
 
-        <div id="queue-status" class="queue-status" hidden>
-            <span id="queue-status-text"></span>
-        </div>
-
         <form id="runner-form" novalidate>
             <input type="hidden" name="event_slug" value="<?= h($slug) ?>">
 
@@ -42,19 +38,28 @@
             <div class="field">
                 <label for="narodenie_den" class="required">Dátum narodenia</label>
                 <div class="field__row">
-                    <select id="narodenie_den" name="narodenie_den" required aria-label="Deň narodenia">
-                        <option value="" disabled selected>Deň</option>
-                        <?php for ($d = 1; $d <= 31; $d++): ?>
-                            <option value="<?= $d ?>"><?= $d ?></option>
-                        <?php endfor; ?>
-                    </select>
-                    <select id="narodenie_mesiac" name="narodenie_mesiac" required aria-label="Mesiac narodenia">
-                        <option value="" disabled selected>Mesiac</option>
-                        <?php for ($m = 1; $m <= 12; $m++): ?>
-                            <option value="<?= $m ?>"><?= $m ?></option>
-                        <?php endfor; ?>
-                    </select>
-                    <input type="number" id="narodenie_rok" name="narodenie_rok" placeholder="Rok" inputmode="numeric" min="1900" max="<?= (int) date('Y') ?>" required aria-label="Rok narodenia">
+                    <div class="field__row-item">
+                        <span class="field__row-label">Deň</span>
+                        <select id="narodenie_den" name="narodenie_den" required aria-label="Deň narodenia">
+                            <option value="" disabled selected>—</option>
+                            <?php for ($d = 1; $d <= 31; $d++): ?>
+                                <option value="<?= $d ?>"><?= $d ?></option>
+                            <?php endfor; ?>
+                        </select>
+                    </div>
+                    <div class="field__row-item">
+                        <span class="field__row-label">Mesiac</span>
+                        <select id="narodenie_mesiac" name="narodenie_mesiac" required aria-label="Mesiac narodenia">
+                            <option value="" disabled selected>—</option>
+                            <?php for ($m = 1; $m <= 12; $m++): ?>
+                                <option value="<?= $m ?>"><?= $m ?></option>
+                            <?php endfor; ?>
+                        </select>
+                    </div>
+                    <div class="field__row-item field__row-item--year">
+                        <span class="field__row-label">Rok</span>
+                        <input type="number" id="narodenie_rok" name="narodenie_rok" placeholder="RRRR" inputmode="numeric" min="1900" max="<?= (int) date('Y') ?>" required aria-label="Rok narodenia">
+                    </div>
                 </div>
                 <span class="field__error" id="narodenie-error" hidden></span>
             </div>
@@ -120,8 +125,33 @@
 
             <button type="submit" id="submit-btn" class="btn btn--primary btn--block">Odoslať</button>
 
-            <div id="form-message" class="form-message" hidden></div>
+            <div class="status-stack">
+                <div id="form-message" class="form-message" hidden></div>
+                <div id="queue-status" class="queue-status" hidden>
+                    <span class="queue-status__icon" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 7v5l3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span id="queue-status-text"></span>
+                </div>
+            </div>
         </form>
+    </div>
+</div>
+
+<div id="pickup-modal" class="modal" hidden>
+    <div class="modal__overlay" data-modal-close></div>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="pickup-modal-title">
+        <div class="modal__icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 12V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v4M4 12v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4M4 12h16M9 6V4M15 6V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <h2 id="pickup-modal-title" class="modal__title">Registrácia odoslaná!</h2>
+        <p class="modal__text">Vyzdvihni si číslo a povedz, že si z formulára.</p>
+        <button type="button" class="btn btn--primary btn--block" data-modal-close>Rozumiem</button>
     </div>
 </div>
 

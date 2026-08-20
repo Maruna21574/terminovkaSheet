@@ -1,0 +1,81 @@
+body.modal-open {
+    overflow: hidden;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+.modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    animation: modal-overlay-in 0.2s ease;
+}
+
+.modal__dialog {
+    position: relative;
+    background: $color-grey-100;
+    border: 1px solid $color-grey-60;
+    max-width: 340px;
+    width: 100%;
+    padding: 32px 24px 24px;
+    text-align: center;
+    animation: modal-dialog-in 0.25s ease;
+}
+
+.modal__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: rgba($color-main-red, 0.15);
+    color: $color-main-red;
+}
+
+.modal__title {
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $color-white;
+}
+
+.modal__text {
+    margin: 0 0 24px;
+    color: $color-grey-20;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+@keyframes modal-overlay-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modal-dialog-in {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
