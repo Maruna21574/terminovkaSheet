@@ -32,6 +32,15 @@
     function hidePickupModal() {
         pickupModal.hidden = true;
         document.body.classList.remove('modal-open');
+
+        // Formulár je už vyčistený (reset prebehol hneď pri odoslaní) - po zavretí
+        // popupu len scrollneme naspäť na začiatok a dáme kurzor do prvého poľa,
+        // nech je hneď vidno pripravený prázdny formulár pre ďalšieho bežca.
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        var firstField = document.getElementById('meno');
+        if (firstField) {
+            firstField.focus({ preventScroll: true });
+        }
     }
 
     pickupModal.querySelectorAll('[data-modal-close]').forEach(function (el) {
