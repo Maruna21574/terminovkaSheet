@@ -37,6 +37,7 @@
         // toho, čo sa odoslalo) - vyčistí sa a scrollne na začiatok až teraz.
         form.reset();
         clearAllFieldErrors();
+        setButtonLoading(false);
         window.clearTimeout(showMessage._t);
         formMessage.hidden = true;
         form.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -222,6 +223,10 @@
                     showMessage('Záznam sa nepodarilo odoslať: ' + error, 'error');
                 }
 
+                if (current.submission_id === lastSubmittedId) {
+                    setButtonLoading(false);
+                }
+
                 SENDING = false;
                 updateQueueStatus();
                 if (latest.length > 0) {
@@ -302,8 +307,6 @@
         lastSubmittedId = item.submission_id;
 
         showMessage('Registrácia sa odosiela. Nezatvárajte okno!', 'success');
-
-        window.setTimeout(function () { setButtonLoading(false); }, 700);
 
         flushQueue();
     });
