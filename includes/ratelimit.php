@@ -26,10 +26,11 @@ function client_ip(): string
 }
 
 /**
- * Vráti true, ak táto IP adresa ešte môže odoslať ďalšiu požiadavku.
- * Zároveň si túto požiadavku "zaznamená" (počíta sa do limitu).
+ * Vráti true, ak tento kľúč (zvyčajne IP adresa, prípadne "login:" + IP pre
+ * samostatný, prísnejší limit na admin login) ešte môže odoslať ďalšiu
+ * požiadavku. Zároveň si túto požiadavku "zaznamená" (počíta sa do limitu).
  */
-function rate_limit_allow(string $ip): bool
+function rate_limit_allow(string $key, int $maxRequests = RATE_LIMIT_MAX_REQUESTS, int $windowSeconds = RATE_LIMIT_WINDOW_SECONDS): bool
 {
     $dir = dirname(RATE_LIMIT_FILE);
     if (!is_dir($dir)) {
@@ -49,25 +50,25 @@ function rate_limit_allow(string $ip): bool
     }
 
     $now = time();
-    $cutoff = $now - RATE_LIMIT_WINDOW_SECONDS;
+    $cutoff = $now - $windowSeconds;
 
-    foreach ($data as $key => $timestamps) {
+    foreach ($data as $existingKey => $timestamps) {
         $fresh = array_values(array_filter((array) $timestamps, function ($t) use ($cutoff) {
             return is_int($t) && $t >= $cutoff;
         }));
         if (empty($fresh)) {
-            unset($data[$key]);
+            unset($data[$existingKey]);
         } else {
-            $data[$key] = $fresh;
+            $data[$existingKey] = $fresh;
         }
     }
 
-    $timestamps = $data[$ip] ?? [];
-    $allowed = count($timestamps) < RATE_LIMIT_MAX_REQUESTS;
+    $timestamps = $data[$key] ?? [];
+    $allowed = count($timestamps) < $maxRequests;
 
     if ($allowed) {
         $timestamps[] = $now;
-        $data[$ip] = $timestamps;
+        $data[$key] = $timestamps;
     }
 
     ftruncate($fh, 0);

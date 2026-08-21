@@ -24,7 +24,14 @@ if (!rate_limit_allow(client_ip())) {
 }
 
 $raw = file_get_contents('php://input');
-$input = json_decode((string) $raw, true);
+
+// Ochrana pred neprimerane veľkým telom požiadavky (formulár má len pár krátkych
+// polí, 20 KB je viac než dosť aj s rezervou).
+if (strlen($raw) > 20000) {
+    respond(413, ['success' => false, 'error' => 'Požiadavka je príliš veľká.']);
+}
+
+$input = json_decode($raw, true);
 
 if (!is_array($input)) {
     respond(400, ['success' => false, 'error' => 'Neplatné dáta.']);
@@ -58,9 +65,13 @@ if ($event === null) {
 }
 if (trim($meno) === '') {
     $errors[] = 'Meno je povinné.';
+} elseif (mb_strlen($meno) > 80) {
+    $errors[] = 'Meno je príliš dlhé.';
 }
 if (trim($priezvisko) === '') {
     $errors[] = 'Priezvisko je povinné.';
+} elseif (mb_strlen($priezvisko) > 80) {
+    $errors[] = 'Priezvisko je príliš dlhé.';
 }
 if (!in_array($pohlavie, ['muz', 'zena'], true)) {
     $errors[] = 'Pohlavie musí byť muž alebo žena.';
@@ -68,8 +79,16 @@ if (!in_array($pohlavie, ['muz', 'zena'], true)) {
 if (!is_valid_birthdate($narodenie)) {
     $errors[] = 'Dátum narodenia musí byť v tvare DD.MM.RRRR.';
 }
+if (mb_strlen($klub) > 100) {
+    $errors[] = 'Klub je príliš dlhý.';
+}
+if (mb_strlen($obec) > 100) {
+    $errors[] = 'Obec je príliš dlhá.';
+}
 if (trim($trat) === '') {
     $errors[] = 'Trať je povinná.';
+} elseif (mb_strlen($trat) > 60) {
+    $errors[] = 'Trať je príliš dlhá.';
 }
 if (!$suhlasUdaje) {
     $errors[] = 'Musíte súhlasiť so spracovaním osobných údajov.';

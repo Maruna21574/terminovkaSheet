@@ -4,20 +4,25 @@ declare(strict_types=1);
 require __DIR__ . '/../config.php';
 require __DIR__ . '/../includes/functions.php';
 require __DIR__ . '/../includes/auth.php';
+require __DIR__ . '/../includes/ratelimit.php';
 
 admin_start_session();
 
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = (string) ($_POST['username'] ?? '');
-    $password = (string) ($_POST['password'] ?? '');
-    $remember = !empty($_POST['remember']);
-    if (admin_login($username, $password, $remember)) {
-        header('Location: /admin/');
-        exit;
+    if (!rate_limit_allow('login:' . client_ip(), 10, 900)) {
+        $error = 'Príliš veľa pokusov o prihlásenie. Skúste to o pár minút.';
+    } else {
+        $username = (string) ($_POST['username'] ?? '');
+        $password = (string) ($_POST['password'] ?? '');
+        $remember = !empty($_POST['remember']);
+        if (admin_login($username, $password, $remember)) {
+            header('Location: /admin/');
+            exit;
+        }
+        $error = 'Nesprávne meno alebo heslo.';
     }
-    $error = 'Nesprávne meno alebo heslo.';
 }
 
 if (admin_is_logged_in()) {

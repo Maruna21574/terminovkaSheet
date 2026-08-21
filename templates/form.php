@@ -4,7 +4,7 @@
         <h1 class="card__title"><?= h($event['name']) ?></h1>
         <p class="card__subtitle">Prezenčná registrácia bežca — vyplňte prosím všetky údaje.</p>
 
-        <form id="runner-form" novalidate>
+        <form id="runner-form" method="post" action="/submit.php" novalidate>
             <input type="hidden" name="event_slug" value="<?= h($slug) ?>">
 
             <!-- Honeypot proti botom - skutoční ľudia toto pole nevidia ani nevyplnia. -->
@@ -15,13 +15,13 @@
 
             <div class="field">
                 <label for="meno" class="required">Meno</label>
-                <input type="text" id="meno" name="meno" autocomplete="given-name" required>
+                <input type="text" id="meno" name="meno" autocomplete="given-name" maxlength="80" required>
                 <span class="field__error" id="meno-error" hidden></span>
             </div>
 
             <div class="field">
                 <label for="priezvisko" class="required">Priezvisko</label>
-                <input type="text" id="priezvisko" name="priezvisko" autocomplete="family-name" required>
+                <input type="text" id="priezvisko" name="priezvisko" autocomplete="family-name" maxlength="80" required>
                 <span class="field__error" id="priezvisko-error" hidden></span>
             </div>
 
@@ -66,17 +66,17 @@
 
             <div class="field">
                 <label for="klub">Klub <span class="field__optional">(nepovinné)</span></label>
-                <input type="text" id="klub" name="klub" autocomplete="organization">
+                <input type="text" id="klub" name="klub" autocomplete="organization" maxlength="100">
             </div>
 
             <div class="field">
                 <label for="obec">Obec <span class="field__optional">(nepovinné)</span></label>
-                <input type="text" id="obec" name="obec" autocomplete="address-level2">
+                <input type="text" id="obec" name="obec" autocomplete="address-level2" maxlength="100">
             </div>
 
             <div class="field">
                 <label for="trat" class="required">Trať</label>
-                <input type="text" id="trat" name="trat" placeholder="napr. 10 km" required>
+                <input type="text" id="trat" name="trat" placeholder="napr. 10 km" maxlength="60" required>
                 <span class="field__error" id="trat-error" hidden></span>
             </div>
 
