@@ -40,14 +40,9 @@ var HEADERS = [
 ];
 
 function doPost(e) {
-    var lock = LockService.getScriptLock();
-    var gotLock = false;
     try {
-        gotLock = lock.tryLock(30000);
-        if (!gotLock) {
-            return jsonResponse({ success: false, error: 'Server je momentálne vyťažený, skúste znova.' });
-        }
-
+        // Parsovanie, kontrola hesla a príprava dát nepotrebujú zámok - nesiahajú
+        // na zdieľaný Sheet, takže nemá zmysel kvôli nim blokovať ostatných.
         var data = JSON.parse(e.postData.contents);
 
         var expectedSecret = PropertiesService.getScriptProperties().getProperty('SHARED_SECRET');
@@ -60,37 +55,48 @@ function doPost(e) {
             return jsonResponse({ success: false, error: 'Chýba ID cieľového Google Sheetu.' });
         }
 
-        var sheet = getOrCreateSheet(spreadsheetId, sheetNameFor(data));
         var submissionId = sanitize(data.submission_id);
-
-        if (submissionId && isDuplicate(sheet, submissionId)) {
-            return jsonResponse({ success: true, duplicate: true });
-        }
-
         var narodenie = sanitize(data.narodenie);
-        var rok = extractYear(narodenie);
-
-        sheet.appendRow([
+        var row = [
             new Date(),
             sanitize(data.event_name || data.event_slug),
             sanitize(data.priezvisko),
             sanitize(data.meno),
             sanitize(data.pohlavie),
             narodenie,
-            rok,
+            extractYear(narodenie),
             sanitize(data.klub),
             sanitize(data.obec),
             sanitize(data.trat),
             submissionId
-        ]);
+        ];
 
-        return jsonResponse({ success: true });
+        // Zámok drží len tú časť, ktorá sa naozaj musí vykonať postupne
+        // (kontrola duplicity + zápis riadka) - ostatní tak čakajú čo najkratšie.
+        var lock = LockService.getScriptLock();
+        var gotLock = false;
+        try {
+            gotLock = lock.tryLock(30000);
+            if (!gotLock) {
+                return jsonResponse({ success: false, error: 'Server je momentálne vyťažený, skúste znova.' });
+            }
+
+            var sheet = getOrCreateSheet(spreadsheetId, sheetNameFor(data));
+
+            if (submissionId && isDuplicate(sheet, submissionId)) {
+                return jsonResponse({ success: true, duplicate: true });
+            }
+
+            sheet.getRange(sheet.getLastRow() + 1, 1, 1, row.length).setValues([row]);
+
+            return jsonResponse({ success: true });
+        } finally {
+            if (gotLock) {
+                lock.releaseLock();
+            }
+        }
     } catch (err) {
         return jsonResponse({ success: false, error: String(err) });
-    } finally {
-        if (gotLock) {
-            lock.releaseLock();
-        }
     }
 }
 
